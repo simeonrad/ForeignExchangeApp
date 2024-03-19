@@ -1,16 +1,24 @@
 package com.telerikacademy.web.foreignexchangeapp.services;
 
 import com.telerikacademy.web.foreignexchangeapp.models.Conversion;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.telerikacademy.web.foreignexchangeapp.repositories.ConversionRepository;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class CurrencyConversionImpl implements CurrencyConversion{
+
+    private final ConversionRepository conversionRepository;
+    private final ExchangeRateService exchangeRateService;
+
+    public CurrencyConversionImpl(ConversionRepository conversionRepository, ExchangeRateService exchangeRateService) {
+        this.conversionRepository = conversionRepository;
+        this.exchangeRateService = exchangeRateService;
+    }
+
     @Override
     public Conversion convertCurrency(BigDecimal amount, String sourceCurrency, String targetCurrency) {
         BigDecimal rate = exchangeRateService.fetchCurrentExchangeRate(sourceCurrency, targetCurrency);
@@ -25,20 +33,6 @@ public class CurrencyConversionImpl implements CurrencyConversion{
         conversion.setConversionTime(LocalDateTime.now());
         conversion.setTransactionId(UUID.randomUUID().toString());
 
-        return conversionRepository.save(conversion);    }
-
-    @Override
-    public Optional<Conversion> getConversionTransactionById(String transactionId) {
-        return conversionRepository.findByTransactionId(transactionId);
-    }
-
-    @Override
-    public List<Conversion> getConversionHistory(LocalDateTime start, LocalDateTime end) {
-        return conversionRepository.findByConversionTimeBetween(start, end);
-    }
-
-    @Override
-    public Page<Conversion> getConversionHistory(LocalDateTime start, LocalDateTime end, Pageable pageable) {
-        return conversionRepository.findByConversionTimeBetween(start, end, pageable);
+        return conversionRepository.save(conversion);
     }
 }
