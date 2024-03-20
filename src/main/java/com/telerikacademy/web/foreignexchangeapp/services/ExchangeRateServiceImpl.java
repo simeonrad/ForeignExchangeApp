@@ -1,5 +1,6 @@
 package com.telerikacademy.web.foreignexchangeapp.services;
 
+import com.telerikacademy.web.foreignexchangeapp.exceptions.CurrencyNotFoundException;
 import com.telerikacademy.web.foreignexchangeapp.models.ExchangeRate;
 import com.telerikacademy.web.foreignexchangeapp.models.ExchangeRateResponse;
 import com.telerikacademy.web.foreignexchangeapp.repositories.ExchangeRateRepository;
@@ -37,6 +38,9 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         String url = apiUrl + "/latest.json?app_id=" + apiKey + "&symbols=" + targetCurrency;
         ResponseEntity<ExchangeRateResponse> response = restTemplate.getForEntity(url, ExchangeRateResponse.class);
         BigDecimal rate = response.getBody().getRates().get(targetCurrency);
+        if (rate == null) {
+            throw new CurrencyNotFoundException(targetCurrency);
+        }
         return rate;
     }
 
