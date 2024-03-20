@@ -1,5 +1,6 @@
 package com.telerikacademy.web.foreignexchangeapp.services;
 
+import com.telerikacademy.web.foreignexchangeapp.exceptions.CurrencyNotFoundException;
 import com.telerikacademy.web.foreignexchangeapp.models.Conversion;
 import com.telerikacademy.web.foreignexchangeapp.repositories.ConversionRepository;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class CurrencyConversionImpl implements CurrencyConversion{
     @Override
     public Conversion convertCurrency(BigDecimal amount, String sourceCurrency, String targetCurrency) {
         BigDecimal rate = exchangeRateService.fetchCurrentExchangeRate(sourceCurrency, targetCurrency);
+
+        if (rate == null) {
+            throw new CurrencyNotFoundException(sourceCurrency, targetCurrency);
+        }
         BigDecimal convertedAmount = amount.multiply(rate);
 
         Conversion conversion = new Conversion();

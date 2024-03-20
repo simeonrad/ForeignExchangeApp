@@ -4,14 +4,11 @@ import com.telerikacademy.web.foreignexchangeapp.models.Conversion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface ConversionHistory {
     Optional<Conversion> getConversionTransactionById(String transactionId);
-
-    List<Conversion> getConversionHistory(LocalDateTime start, LocalDateTime end);
-
-    Page<Conversion> getConversionHistory(LocalDateTime start, LocalDateTime end, Pageable pageable);
+    Page<Conversion> getConversionHistoryByStartEndTime(LocalDate start, LocalDate end, Pageable pageable);
+    Page<Conversion> getConversionsByDate(LocalDate date, Pageable pageable);
 }
