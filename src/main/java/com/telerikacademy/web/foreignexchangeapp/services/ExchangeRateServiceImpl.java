@@ -59,7 +59,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         }
     }
 
-    private void updateOrInsertExchangeRate(String sourceCurrency, String targetCurrency, BigDecimal rate) {
+    public void updateOrInsertExchangeRate(String sourceCurrency, String targetCurrency, BigDecimal rate) {
         Optional<ExchangeRate> existingRate = exchangeRateRepository.findBySourceCurrencyAndTargetCurrency(sourceCurrency, targetCurrency);
         if (existingRate.isPresent()) {
             ExchangeRate rateToUpdate = existingRate.get();
