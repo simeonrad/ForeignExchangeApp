@@ -1,13 +1,9 @@
 package com.telerikacademy.web.foreignexchangeapp;
 
 import com.telerikacademy.web.foreignexchangeapp.exceptions.CurrencyNotFoundException;
-import com.telerikacademy.web.foreignexchangeapp.models.Conversion;
 import com.telerikacademy.web.foreignexchangeapp.models.ExchangeRate;
 import com.telerikacademy.web.foreignexchangeapp.models.ExchangeRateResponse;
-import com.telerikacademy.web.foreignexchangeapp.repositories.ConversionRepository;
 import com.telerikacademy.web.foreignexchangeapp.repositories.ExchangeRateRepository;
-import com.telerikacademy.web.foreignexchangeapp.services.CurrencyConversionImpl;
-import com.telerikacademy.web.foreignexchangeapp.services.ExchangeRateService;
 import com.telerikacademy.web.foreignexchangeapp.services.ExchangeRateServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,9 +60,7 @@ public class ExchangeRateServiceTests {
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
         // Act & Assert
-        assertThrows(CurrencyNotFoundException.class, () -> {
-            service.fetchCurrentExchangeRate(sourceCurrency, targetCurrency);
-        });
+        assertThrows(CurrencyNotFoundException.class, () -> service.fetchCurrentExchangeRate(sourceCurrency, targetCurrency));
     }
 
     @Test
